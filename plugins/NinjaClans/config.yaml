@@ -1,0 +1,25 @@
+name: Ninja Clans
+id: NinjaClans
+key: NinjaClans
+author_link: http://www.shmuelfomberg.com/
+author_name: Shmuel Fomberg
+description: You can have different user groups that are blind to each other
+version: 0.1
+l10n_class: NinjaClans::L10N
+
+applications:
+    cms:
+        callbacks:
+            template_param.edit_author: '$NinjaClans::NinjaClans::Plugin::template_param_edit_author'
+            cms_pre_save.author: '$NinjaClans::NinjaClans::Plugin::author_pre_save'
+
+callbacks:
+    MT::Author::pre_save: '$NinjaClans::NinjaClans::Plugin::add_to_clan'
+    MT::Author::pre_search: '$NinjaClans::NinjaClans::Plugin::see_only_clan'
+
+settings:
+    clans:
+        default:
+        scope: system
+
+system_config_template: set_clans.tmpl
