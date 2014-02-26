@@ -20,8 +20,8 @@ sub add_to_clan {
     my $app = MT->instance;
     my $user = _get_user($app) 
         or return 1;
-    my $clan = $user->hint();
-    $obj->hint( $clan );
+    my $clan = $user->clan();
+    $obj->clan( $clan );
     return 1;
 }
 
@@ -30,15 +30,15 @@ sub see_only_clan {
     my $app = MT->instance;
     my $user = _get_user($app) 
         or return 1;
-    my $clan = $user->hint();
+    my $clan = $user->clan();
     if (defined $terms and not ref $terms) {
         return 1;
     }
     if (defined $clan) {
-        $terms->{hint} = $clan;
+        $terms->{clan} = $clan;
     }
     else {
-        $terms->{hint} = \'is NULL';
+        $terms->{clan} = \'is NULL';
     }
     return 1;
 }
@@ -69,10 +69,10 @@ sub template_param_edit_author {
         show_hint => 1,
         });
 
-    my $hint = $author ? $author->hint : undef;
+    my $clan = $author ? $author->clan : undef;
     my $selected = 'selected="selected"';
     my $select = '<select name="user_clan" id="user_clan">';
-    if (not $hint) {
+    if (not $clan) {
         $select .= "<option value=\"\" $selected>(none)</option>";
     } else {
         $select .= '<option value="">(none)</option>';
@@ -80,7 +80,7 @@ sub template_param_edit_author {
     require MT::Util;
     foreach my $clan (@clans) {
         my $e_clan = MT::Util::encode_html($clan);
-        if ($hint and $hint eq $clan) {
+        if ($clan and $clan eq $clan) {
             $select .= "<option value=\"$e_clan\" $selected>$e_clan</option>";
         }
         else {
@@ -111,7 +111,16 @@ sub author_pre_save {
     else {
         $clan = undef unless grep { $clan eq $_ } @clans;
     }
-    $obj->hint( $clan );
+    $obj->clan( $clan );
+    return 1;
+}
+
+sub init_app {
+    my ( $cb, $app ) = @_;
+    use MT::Author;
+    my $props = MT::Author->properties();
+    push @{$props->{columns}}, 'clan';
+    $props->{column_defs}{clan} = { type => 'string', size => '30' };
     return 1;
 }
 
