@@ -34,12 +34,9 @@ sub see_only_clan {
     if (defined $terms and not ref $terms) {
         return 1;
     }
-    if (defined $clan) {
-        $terms->{clan} = $clan;
-    }
-    else {
-        $terms->{clan} = \'is NULL';
-    }
+    my $clan_str = 'is NULL';
+    $clan_str .= " OR author_clan=\"$clan\"" if defined $clan;
+    $terms->{clan} = \$clan_str;
     return 1;
 }
 
@@ -78,9 +75,9 @@ sub template_param_edit_author {
         $select .= '<option value="">(none)</option>';
     }
     require MT::Util;
-    foreach my $clan (@clans) {
-        my $e_clan = MT::Util::encode_html($clan);
-        if ($clan and $clan eq $clan) {
+    foreach my $clan_label (@clans) {
+        my $e_clan = MT::Util::encode_html($clan_label);
+        if ($clan and $clan eq $clan_label) {
             $select .= "<option value=\"$e_clan\" $selected>$e_clan</option>";
         }
         else {
@@ -121,6 +118,7 @@ sub init_app {
     my $props = MT::Author->properties();
     push @{$props->{columns}}, 'clan';
     $props->{column_defs}{clan} = { type => 'string', size => '30' };
+    $props->{column_names}{clan} = 1;
     return 1;
 }
 
