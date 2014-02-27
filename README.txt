@@ -7,6 +7,9 @@ in his clan, and not other clans.
 Civilians (users that don't have a clan set) can not see any ninja.
 Everyone can see Civilians. Administrator can see everybody. 
 
+If a user sees something that user from other clan did, (i.e. an entry)
+he will see "user deleted". because, ninjas.
+
 This plugin have no purpose. it was just written for fun.
 
 Installation
