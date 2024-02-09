@@ -28,6 +28,8 @@ list your clans. (comma-delimited list)
 Now in every user profile page, there is a select box in the bottom 
 where you can assign a user to a clan, or to "(none)" - a civilian.
 
+Did I really wrote it?
+
 Author and Copyright
 ====================
 
